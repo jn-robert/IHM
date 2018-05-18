@@ -107,7 +107,6 @@ public class ControlButton implements ActionListener {
                         nbAligne++;
                     }
                 } catch (ArrayIndexOutOfBoundsException e){}
-                System.out.println(x+" "+y);
                 dumpLigne(x, y, 2);
                 nbAligne+=3;
             }
@@ -122,22 +121,17 @@ public class ControlButton implements ActionListener {
             if (tab[x][y] == tab[x+1][y] && tab[x][y] == tab[x+2][y]){
                 resulta = true;
                 try {
-                    if (tab[x][y] == tab[x+2][y] && tab[x][y] == tab[x+3][y]){
+                    if (tab[x][y] == tab[x+3][y]){
                         try {
-                            if (tab[x][y] == tab[x+3][y] && tab[x][y] == tab[x+4][y]){
-                                for(int i = 0 ; i < 5 ; i++){
+                            if (tab[x][y] == tab[x+4][y]){
                                     nbAligne++;
-                                }
                             }
                         } catch (ArrayIndexOutOfBoundsException e){}
-                        for(int i = 0 ; i < 4 ; i++){
                             nbAligne++;
-                        }
                     }
                 } catch (ArrayIndexOutOfBoundsException e){}
-                nbAligne+=3;
-                for (int i = 0 ; i < nbAligne ; i++) {
-                    System.out.println(nbAligne);
+                nbAligne+=2;
+                for (int i = 0 ; i <= nbAligne ; i++) {
                     dumpColonne(x + nbAligne, y);
                 }
             }
@@ -147,23 +141,18 @@ public class ControlButton implements ActionListener {
 
     public void dumpLigne(int x, int y, int nbfois){
         for (int n = 0 ; n <= nbfois ; n++) {
-            System.out.println("n ="+n);
             for (int i = x; i >= 1; i--) {
-                System.out.println("i ="+i);
-                tab[i][y] = tab[i - 1][y+n];
-                System.out.println("Switch");
+                tab[i][y+n] = tab[i - 1][y+n];
             }
-            System.out.println("Random");
-            tab[0][y+n] = (int) Math.floor(Math.random() * 7);
-            System.out.println("n2 = "+n);
+            tab[0][y+n] = (int) Math.floor(Math.random() * 8);
         }
     }
 
     public void dumpColonne(int x, int y){
-        for ( int i = x ; i == 1 ; i--){
+        for ( int i = x ; i >= 1 ; i--){
             tab[i][y] = tab[i-1][y];
         }
-        tab[0][y] = (int) Math.floor(Math.random() * 7);
+        tab[0][y] = (int) Math.floor(Math.random() * 8);
     }
 
 
