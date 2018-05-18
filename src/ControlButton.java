@@ -44,21 +44,25 @@ public class ControlButton implements ActionListener {
     }
 
     public  void test(){
+        boolean restart;
         if (verifMouv()) {
             tab = model.getTableauValeurs();
             reverse(tab);
-
-            for (int k = 0 ; k < 8 ; k++){
-                for (int l = 0 ; l < 8 ; l++){
-                    if (verficationLigne(k,l,tab)){
-
-                        model.setTableauValeurs(tab);
-                        vue.refresh();
-                    }
-                    if (verficationColonne(k,l,tab)){
-
-                        model.setTableauValeurs(tab);
-                        vue.refresh();
+            restart = true;
+            while (restart) {
+                restart = false;
+                for (int k = 0; k < 8; k++) {
+                    for (int l = 0; l < 8; l++) {
+                        if (verficationLigne(k, l, tab)) {
+                            restart = true;
+                            model.setTableauValeurs(tab);
+                            vue.refresh();
+                        }
+                        if (verficationColonne(k, l, tab)) {
+                            restart = true;
+                            model.setTableauValeurs(tab);
+                            vue.refresh();
+                        }
                     }
                 }
             }

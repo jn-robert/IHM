@@ -14,5 +14,4 @@ public class Model {
     public void setTableauValeurs(int[][] tableauValeurs) {
         this.tableauValeurs = tableauValeurs;
     }
-
 }
