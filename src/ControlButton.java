@@ -11,7 +11,8 @@ public class ControlButton implements ActionListener {
     private int toY;
     private boolean selection = false;
     private int[][] tab;
-    private int nbAligne;
+    private int nbErreur = 0;
+    private int score = 0;
 
     public ControlButton(Vue vue, Model model){
         this.vue = vue;
@@ -45,6 +46,7 @@ public class ControlButton implements ActionListener {
 
     public  void test(){
         boolean restart;
+        boolean checkReverse = false;
         if (verifMouv()) {
             tab = model.getTableauValeurs();
             reverse(tab);
@@ -55,17 +57,26 @@ public class ControlButton implements ActionListener {
                     for (int l = 0; l < 8; l++) {
                         if (verficationLigne(k, l, tab)) {
                             restart = true;
+                            checkReverse = true;
                             model.setTableauValeurs(tab);
                             vue.refresh();
                         }
                         if (verficationColonne(k, l, tab)) {
                             restart = true;
+                            checkReverse = true;
                             model.setTableauValeurs(tab);
                             vue.refresh();
                         }
                     }
                 }
             }
+            if (! checkReverse){
+                reverse(tab);
+                model.setTableauValeurs(tab);
+                nbErreur++;
+                System.out.println(nbErreur);
+            }
+            getScore();
             vue.refresh();
         }
     }
@@ -95,7 +106,6 @@ public class ControlButton implements ActionListener {
 
     public boolean verficationLigne(int x, int y,int[][] tab){
         boolean resulta =false;
-        int nbAligne=0;
         try {
             if (tab[x][y] == tab[x][y+1] && tab[x][y] == tab[x][y+2]){
                 resulta = true;
@@ -104,15 +114,15 @@ public class ControlButton implements ActionListener {
                         try {
                             if (tab[x][y] == tab[x][y+3] && tab[x][y] == tab[x][y+4]){
                                 dumpLigne(x,y,4);
-                                nbAligne++;
+                                scoreAdd(5);
                             }
                         } catch (ArrayIndexOutOfBoundsException e){}
                         dumpLigne(x,y,3);
-                        nbAligne++;
+                        scoreAdd(4);
                     }
                 } catch (ArrayIndexOutOfBoundsException e){}
                 dumpLigne(x, y, 2);
-                nbAligne+=3;
+                scoreAdd(3);
             }
         } catch (ArrayIndexOutOfBoundsException e){}
         return resulta;
@@ -124,17 +134,9 @@ public class ControlButton implements ActionListener {
         try {
             if (tab[x][y] == tab[x+1][y] && tab[x][y] == tab[x+2][y]){
                 resulta = true;
-                try {
-                    if (tab[x][y] == tab[x+3][y]){
-                        try {
-                            if (tab[x][y] == tab[x+4][y]){
-                                    nbAligne++;
-                            }
-                        } catch (ArrayIndexOutOfBoundsException e){}
-                            nbAligne++;
-                    }
-                } catch (ArrayIndexOutOfBoundsException e){}
+                nbAligne = Model.getNbAligne(x, y, nbAligne, tab);
                 nbAligne+=2;
+                scoreAdd(nbAligne+1);
                 for (int i = 0 ; i <= nbAligne ; i++) {
                     dumpColonne(x + nbAligne, y);
                 }
@@ -157,6 +159,14 @@ public class ControlButton implements ActionListener {
             tab[i][y] = tab[i-1][y];
         }
         tab[0][y] = (int) Math.floor(Math.random() * 8);
+    }
+
+    public void scoreAdd(int n){
+        this.score+=n;
+    }
+
+    public void getScore(){
+        System.out.println("score = " + score);
     }
 
 

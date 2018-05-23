@@ -24,7 +24,7 @@ public class Vue extends JFrame {
         button = new ControlButton(this, model);
         panel = new JPanel(new GridLayout(8,8));
         tabBouton = new JButton[8][8];
-        model.rempliTab();
+        model.initTab();
     }
 
     public void creerWidget(){
