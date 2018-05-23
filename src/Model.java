@@ -1,5 +1,7 @@
 public class Model {
     private int[][] tableauValeurs = new int[8][8];
+    private int niveau = 1;
+    private int score = 0;
 
     public void initTab(){
         rempliTab();
@@ -93,6 +95,31 @@ public class Model {
         }
         tableauValeurs[0][y] = (int) Math.floor(Math.random() * 8);
     }
+
+    public void scoreAdd(int nb_Ali){
+        switch (nb_Ali){
+            case 3:
+                score += 100*niveau;
+                break;
+            case 4:
+                score += 300*niveau;
+                break;
+            case 5:
+                score += 1000*niveau;
+        }
+    }
+
+    public int testNiveau(int scoreTimer){
+        if (scoreTimer >= 100){
+            this.niveau++;
+            return 50;
+        }
+        return scoreTimer;
+    }
+
+    public int getNiveau(){return niveau;}
+
+    public int getScore() { return score; }
 
     public int[][] getTableauValeurs() { return tableauValeurs; }
 

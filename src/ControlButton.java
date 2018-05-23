@@ -12,7 +12,7 @@ public class ControlButton implements ActionListener {
     private boolean selection = false;
     private int[][] tab;
     private int nbErreur = 0;
-    private int score = 0;
+    private int scoretimer = 50;
 
     public ControlButton(Vue vue, Model model){
         this.vue = vue;
@@ -76,7 +76,9 @@ public class ControlButton implements ActionListener {
                 nbErreur++;
                 System.out.println(nbErreur);
             }
-            getScore();
+            setScoreTimer(model.testNiveau(scoretimer));
+            System.out.println("scoretimer = " + scoretimer);
+            System.out.println("score = " + model.getScore());
             vue.refresh();
         }
     }
@@ -114,15 +116,18 @@ public class ControlButton implements ActionListener {
                         try {
                             if (tab[x][y] == tab[x][y+3] && tab[x][y] == tab[x][y+4]){
                                 dumpLigne(x,y,4);
-                                scoreAdd(5);
+                                this.scoretimer+=5;
+                                model.scoreAdd(5);
                             }
                         } catch (ArrayIndexOutOfBoundsException e){}
                         dumpLigne(x,y,3);
-                        scoreAdd(4);
+                        this.scoretimer+=4;
+                        model.scoreAdd(4);
                     }
                 } catch (ArrayIndexOutOfBoundsException e){}
                 dumpLigne(x, y, 2);
-                scoreAdd(3);
+                this.scoretimer+=3;
+                model.scoreAdd(3);
             }
         } catch (ArrayIndexOutOfBoundsException e){}
         return resulta;
@@ -136,7 +141,8 @@ public class ControlButton implements ActionListener {
                 resulta = true;
                 nbAligne = Model.getNbAligne(x, y, nbAligne, tab);
                 nbAligne+=2;
-                scoreAdd(nbAligne+1);
+                this.scoretimer+=nbAligne;
+                model.scoreAdd(nbAligne+1);
                 for (int i = 0 ; i <= nbAligne ; i++) {
                     dumpColonne(x + nbAligne, y);
                 }
@@ -161,14 +167,11 @@ public class ControlButton implements ActionListener {
         tab[0][y] = (int) Math.floor(Math.random() * 8);
     }
 
-    public void scoreAdd(int n){
-        this.score+=n;
+    public void setScoreTimer(int scoretimer){
+        this.scoretimer = scoretimer;
     }
 
-    public void getScore(){
-        System.out.println("score = " + score);
+    public int getScoretimer() {
+        return scoretimer;
     }
-
-
-
 }
