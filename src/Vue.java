@@ -1,16 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Vue extends JFrame {
     private Model model;
     private ControlButton button;
     private JButton[][] tabBouton;
     private JPanel panel;
+    private JMenuItem itemInterface1;
+    private JMenuBar barMenu;
+    private JMenu menu;
 
     public Vue(Model model){
         this.model = model;
-        init();
-        creerWidget();
+        creerMenu();
+        newGame();
         setTitle("Bejeweled");
         setResizable(true);
         setSize(500,500);
@@ -27,6 +31,16 @@ public class Vue extends JFrame {
         model.initTab();
     }
 
+    public void creerMenu(){
+        barMenu = new JMenuBar();
+        menu = new JMenu("Options");
+        itemInterface1 = new JMenuItem("Nouvelle partie");
+        menu.add(itemInterface1);
+
+        barMenu.add(menu);
+        setJMenuBar(barMenu);
+    }
+
     public void creerWidget(){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -38,6 +52,15 @@ public class Vue extends JFrame {
             }
         }
         setContentPane(panel);
+    }
+
+    public void newGame(){
+        init();
+        creerWidget();
+    }
+
+    public void setMenuContoler(ActionListener listener){
+        itemInterface1.addActionListener(listener);
     }
 
     public void refresh(){
@@ -53,4 +76,6 @@ public class Vue extends JFrame {
     public JButton[][] getTabBouton() {
         return tabBouton;
     }
+
+    public JMenuItem getItemInterface1() { return itemInterface1; }
 }
