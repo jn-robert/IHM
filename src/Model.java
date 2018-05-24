@@ -1,7 +1,11 @@
+import javax.swing.*;
+
 public class Model {
     private int[][] tableauValeurs = new int[8][8];
     private int niveau = 1;
     private int score = 0;
+    private int tries = 15;
+    private int scoreTimer = 50;
 
     public void initTab(){
         rempliTab();
@@ -19,6 +23,19 @@ public class Model {
                 }
             }
         }
+    }
+
+    public int getScoreTimer() {
+        return scoreTimer;
+    }
+
+    public void setScoreTimer(int scoreTimer) {
+        this.scoreTimer = scoreTimer;
+        testNiveau();
+    }
+
+    public void scoreTimer(int scoreTimer){
+        this.scoreTimer += scoreTimer;
     }
 
     public void rempliTab(){
@@ -109,15 +126,26 @@ public class Model {
         }
     }
 
-    public int testNiveau(int scoreTimer){
+    public void testNiveau(){
         if (scoreTimer >= 100){
             this.niveau++;
-            return 50;
+            scoreTimer = 50;
         }
-        return scoreTimer;
     }
 
-    public int getNiveau(){return niveau;}
+    public void triesFail(){
+        this.tries--;
+    }
+
+    public void setNiveau(int niveau) { this.niveau = niveau; }
+
+    public void setScore(int score) { this.score = score; }
+
+    public void setTries(int tries) { this.tries = tries; }
+
+    public int getTries(){ return tries; }
+
+    public int getNiveau(){ return niveau; }
 
     public int getScore() { return score; }
 
