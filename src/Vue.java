@@ -19,6 +19,7 @@ public class Vue extends JFrame {
 
     private JPanel global;
 
+    public Timer t;
     JProgressBar prog=new JProgressBar(0,100);
 
     public Vue(Model model){
@@ -97,6 +98,8 @@ public class Vue extends JFrame {
         model.setNiveau(1);
         model.setScore(0);
         model.setTries(15);
+        model.setScoreTimer(50);
+        refresh();
     }
 
     public void setMenuContoler(ActionListener listener){
@@ -116,13 +119,20 @@ public class Vue extends JFrame {
     }
 
     public void timer(){
-        Timer t=new Timer(3000,new ActionListener() {
+        t=new Timer(3000,new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 model.setScoreTimer(model.getScoreTimer()-model.getNiveau());
                 prog.setValue(model.getScoreTimer());
+                System.out.println("Timer");
+                if(model.testEnd()){
+                    t.stop();
+                    msg("Game over");
+                    msg(model.end());
+                    newGame();
+                    refresh();
+                }
             }
         });
-        t.start();
     }
 
     public JButton[][] getTabBouton() {
@@ -130,4 +140,10 @@ public class Vue extends JFrame {
     }
 
     public JMenuItem getItemInterface1() { return itemInterface1; }
+
+    public void msg(String msgErreur){
+        JOptionPane d = new JOptionPane();
+        d.showMessageDialog(this, msgErreur, "Game over", JOptionPane.WARNING_MESSAGE);
+        JDialog fenErr = d.createDialog(this, "Fin");
+    }
 }

@@ -10,6 +10,7 @@ public class ControlButton implements ActionListener {
     private int toX;
     private int toY;
     private boolean selection = false;
+    private boolean play = false;
     private int[][] tab;
 
     public ControlButton(Vue vue, Model model){
@@ -18,6 +19,10 @@ public class ControlButton implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e){
+        if (!play){
+            vue.t.start();
+            play = true;
+        }
         JButton button = (JButton) e.getSource();
         int x = Integer.parseInt(String.valueOf(button.getName().charAt(0)));
         int y = Integer.parseInt(String.valueOf(button.getName().charAt(2)));
@@ -73,7 +78,11 @@ public class ControlButton implements ActionListener {
                 model.setTableauValeurs(tab);
                 model.triesFail();
             }
-            System.out.println("model.getScoreTimer() = " + model.getScoreTimer());
+            if (model.testEnd()){
+                vue.t.stop();
+                vue.msg(model.end());
+                vue.newGame();
+            }
             vue.refresh();
         }
     }
@@ -161,4 +170,5 @@ public class ControlButton implements ActionListener {
         }
         tab[0][y] = (int) Math.floor(Math.random() * 8);
     }
+
 }

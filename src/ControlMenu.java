@@ -15,6 +15,7 @@ public class ControlMenu implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vue.getItemInterface1()){
+            vue.t.stop();
             vue.newGame();
             vue.refresh();
         }

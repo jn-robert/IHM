@@ -1,4 +1,6 @@
-import javax.swing.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Model {
     private int[][] tableauValeurs = new int[8][8];
@@ -6,6 +8,7 @@ public class Model {
     private int score = 0;
     private int tries = 15;
     private int scoreTimer = 50;
+    private ArrayList<Integer>lScore = new ArrayList<>();
 
     public void initTab(){
         rempliTab();
@@ -23,15 +26,6 @@ public class Model {
                 }
             }
         }
-    }
-
-    public int getScoreTimer() {
-        return scoreTimer;
-    }
-
-    public void setScoreTimer(int scoreTimer) {
-        this.scoreTimer = scoreTimer;
-        testNiveau();
     }
 
     public void scoreTimer(int scoreTimer){
@@ -133,8 +127,129 @@ public class Model {
         }
     }
 
+    public boolean testEnd(){
+        if ( tries == 0){
+            return true;
+        }
+        if ( scoreTimer <= 0){
+            return true;
+        }
+        return false;
+    }
+
     public void triesFail(){
         this.tries--;
+    }
+
+    public String end(){
+        String msg = "Top score : \n";
+        lireScore();
+        if (placeScore() > -1){
+            msg += lScore.get(0)+"\n";
+            msg += lScore.get(1)+"\n";
+            msg += lScore.get(2)+"\n";
+            msg += "Votre score est placer n° "+(placeScore()+1)+"\n";
+            msg += "Votre score est de :"+score;
+        }
+        ecrireScore();
+
+        return msg;
+    }
+
+    public int placeScore(){
+        for (int i = 0 ; i < 3 ; i++){
+            if (score > lScore.get(i)){
+                return i;
+            }
+        }
+        return -10;
+    }
+
+    public void lireScore(){
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("score.txt"));
+            String scoreLu;
+            lScore.removeAll(lScore);
+
+            while ((scoreLu = br.readLine()) != null){
+                try {
+                    lScore.add(Integer.parseInt(scoreLu));
+                } catch (NumberFormatException en){}
+            }
+
+            br.close();
+        }catch (IOException e) {}
+        triScore();
+    }
+
+    public void triScore(){
+        Collections.sort(lScore);
+        Collections.reverse(lScore);
+    }
+
+    public void ecrireScore(){
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("score.txt",true));
+            lScore.add(score);
+            bw.write(""+lScore.get(lScore.size()-1));
+            bw.newLine();
+            bw.close();
+        }catch (IOException e2){}
+    }
+
+    public boolean testDefaite(){
+        int[][] tabTest = tableauValeurs;
+        System.out.println("test all");
+        for (int i = 0 ; i < 8 ; i++){
+            for (int j = 0 ; j < 8 ; j++){
+                try {
+                    int temp = tabTest[i][j];
+                    tabTest[i][j] = tabTest[i][j+1];
+                    tabTest[i][j+1] = temp;
+
+                    if (testAli(tabTest)) return false;
+
+                    temp = tabTest[i][j];
+                    tabTest[i][j] = tabTest[i][j+1];
+                    tabTest[i][j+1] = temp;
+
+                    temp = tabTest[i][j];
+                    tabTest[i][j] = tabTest[i+1][j];
+                    tabTest[i+1][j] = temp;
+
+                    if (testAli(tabTest)) return false;
+                } catch (ArrayIndexOutOfBoundsException e){}
+            }
+        }
+        return true;
+    }
+
+    private boolean testAli(int[][] tabTest) {
+        for (int x = 0 ; x < 8 ; x++){
+            for (int y = 0 ; y < 8 ; y++){
+                try {
+                    if (tabTest[x][y] == tabTest[x][y+1] && tabTest[x][y] == tabTest[x][y+2]){
+                        return true;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e){}
+                try {
+                    if (tabTest[x][y] == tabTest[x+1][y] && tabTest[x][y] == tabTest[x+2][y]){
+                        return true;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e){}
+            }
+        }
+        return false;
+    }
+
+
+    public int getScoreTimer() {
+        return scoreTimer;
+    }
+
+    public void setScoreTimer(int scoreTimer) {
+        this.scoreTimer = scoreTimer;
+        testNiveau();
     }
 
     public void setNiveau(int niveau) { this.niveau = niveau; }
@@ -151,7 +266,9 @@ public class Model {
 
     public int[][] getTableauValeurs() { return tableauValeurs; }
 
-    public void setTableauValeurs(int[][] tableauValeurs) {
-        this.tableauValeurs = tableauValeurs;
+    public void setTableauValeurs(int[][] tableauValeurs) { this.tableauValeurs = tableauValeurs; }
+
+    public ArrayList<Integer> getlScore() {
+        return lScore;
     }
 }
