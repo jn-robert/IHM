@@ -119,11 +119,17 @@ public class Vue extends JFrame {
     }
 
     public void timer(){
-        t=new Timer(3000,new ActionListener() {
+        final int[] cpt = {0};
+        t=new Timer(1000,new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                model.setScoreTimer(model.getScoreTimer()-model.getNiveau());
-                prog.setValue(model.getScoreTimer());
-                System.out.println("Timer");
+                if(cpt[0] == 3){
+                    model.setScoreTimer(model.getScoreTimer()-model.getNiveau());
+                    prog.setValue(model.getScoreTimer());
+                    System.out.println("Timer");
+                    System.out.println("model.getScoreTimer() = " + model.getScoreTimer());
+                    cpt[0]=0;
+                }
+                cpt[0]++;
                 if(model.testEnd()){
                     t.stop();
                     msg("Game over");

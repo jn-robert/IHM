@@ -133,7 +133,10 @@ public class Model {
         }
         if ( scoreTimer <= 0){
             return true;
-        }
+        }/*
+        if ( testDefaite()){
+            return true;
+        }*/
         return false;
     }
 
@@ -198,27 +201,36 @@ public class Model {
     }
 
     public boolean testDefaite(){
-        int[][] tabTest = tableauValeurs;
-        System.out.println("test all");
-        for (int i = 0 ; i < 8 ; i++){
-            for (int j = 0 ; j < 8 ; j++){
-                try {
-                    int temp = tabTest[i][j];
-                    tabTest[i][j] = tabTest[i][j+1];
-                    tabTest[i][j+1] = temp;
-
-                    if (testAli(tabTest)) return false;
-
-                    temp = tabTest[i][j];
-                    tabTest[i][j] = tabTest[i][j+1];
-                    tabTest[i][j+1] = temp;
-
-                    temp = tabTest[i][j];
-                    tabTest[i][j] = tabTest[i+1][j];
-                    tabTest[i+1][j] = temp;
-
-                    if (testAli(tabTest)) return false;
-                } catch (ArrayIndexOutOfBoundsException e){}
+        int[][] tabtest = tableauValeurs;
+        for (int x = 0 ; x < 8 ; x++){
+            for (int y = 0 ; y < 8 ; y++){
+                if (y < 7){
+                    int temp = tabtest[x][y];
+                    tabtest[x][y] = tabtest[x][y+1];
+                    tabtest[x][y+1] = temp;
+                    if(testAli(tabtest)){
+                        return false;
+                    }
+                    temp = tabtest[x][y];
+                    tabtest[x][y] = tabtest[x][y+1];
+                    tabtest[x][y+1] = temp;
+                }
+            }
+        }
+        tabtest = tableauValeurs;
+        for (int x = 0 ; x < 8 ; x++){
+            for (int y = 0 ; y < 8 ; y++){
+                if (x < 7){
+                    int temp = tabtest[x][y];
+                    tabtest[x][y] = tabtest[x+1][y];
+                    tabtest[x+1][y] = temp;
+                    if(testAli(tabtest)){
+                        return false;
+                    }
+                    temp = tabtest[x][y];
+                    tabtest[x][y] = tabtest[x+1][y];
+                    tabtest[x+1][y] = temp;
+                }
             }
         }
         return true;
