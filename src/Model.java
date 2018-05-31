@@ -133,10 +133,7 @@ public class Model {
         }
         if ( scoreTimer <= 0){
             return true;
-        }/*
-        if ( testDefaite()){
-            return true;
-        }*/
+        }
         return false;
     }
 
@@ -148,11 +145,17 @@ public class Model {
         String msg = "Top score : \n";
         lireScore();
         if (placeScore() > -1){
-            msg += lScore.get(0)+"\n";
-            msg += lScore.get(1)+"\n";
-            msg += lScore.get(2)+"\n";
+            msg += "    N°1 :"+lScore.get(0)+"\n";
+            msg += "    N°2 :"+lScore.get(1)+"\n";
+            msg += "    N°3 :"+lScore.get(2)+"\n";
             msg += "Votre score est placer n° "+(placeScore()+1)+"\n";
             msg += "Votre score est de :"+score;
+        }
+        else{
+            msg += "    N°1 :"+lScore.get(0)+"\n";
+            msg += "    N°2 :"+lScore.get(1)+"\n";
+            msg += "    N°3 :"+lScore.get(2)+"\n";
+            msg += "Votre score ne fait pas partie du top 3";
         }
         ecrireScore();
 

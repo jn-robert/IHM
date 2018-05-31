@@ -116,9 +116,9 @@ public class ControlButton implements ActionListener {
             if (tab[x][y] == tab[x][y+1] && tab[x][y] == tab[x][y+2]){
                 resulta = true;
                 try {
-                    if (tab[x][y] == tab[x][y+2] && tab[x][y] == tab[x][y+3]){
+                    if (tab[x][y] == tab[x][y+3]){
                         try {
-                            if (tab[x][y] == tab[x][y+3] && tab[x][y] == tab[x][y+4]){
+                            if (tab[x][y] == tab[x][y+4]){
                                 dumpLigne(x,y,4);
                                 model.scoreTimer(5);
                                 model.scoreAdd(5);
