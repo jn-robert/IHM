@@ -8,7 +8,10 @@ public class Vue extends JFrame {
     private ControlButton button;
     private JButton[][] tabBouton;
     private JPanel panel;
+
     private JMenuItem itemInterface1;
+    private JMenuItem itemInterface2;
+    private JMenuItem itemInterface3;
     private JMenuBar barMenu;
     private JMenu menu;
     private JPanel text;
@@ -60,7 +63,11 @@ public class Vue extends JFrame {
         barMenu = new JMenuBar();
         menu = new JMenu("Options");
         itemInterface1 = new JMenuItem("Nouvelle partie");
+        itemInterface2 = new JMenuItem("Pause");
+        itemInterface3 = new JMenuItem("Top score");
         menu.add(itemInterface1);
+        menu.add(itemInterface2);
+        menu.add(itemInterface3);
 
         barMenu.add(menu);
         setJMenuBar(barMenu);
@@ -84,7 +91,6 @@ public class Vue extends JFrame {
         JPanel p=new JPanel();
         p.add(new JLabel("Progress :"));
         p.add(prog);
-        setContentPane(p);
 
         global.add(text);
         global.add(panel);
@@ -104,9 +110,12 @@ public class Vue extends JFrame {
 
     public void setMenuContoler(ActionListener listener){
         itemInterface1.addActionListener(listener);
+        itemInterface2.addActionListener(listener);
+        itemInterface3.addActionListener(listener);
     }
 
     public void refresh(){
+        global.removeAll();
         score.setText("Score : " + model.getScore());
         level.setText("Level : " + model.getNiveau());
         tries.setText("Tries : " + model.getTries());
@@ -116,6 +125,19 @@ public class Vue extends JFrame {
                 panel.add(tabBouton[i][j]);
             }
         }
+        JPanel text = new JPanel();
+        text.add(score);
+        text.add(level);
+        text.add(tries);
+
+        JPanel p=new JPanel();
+        p.add(new JLabel("Progress :"));
+        p.add(prog);
+
+        global.add(text);
+        global.add(panel);
+        global.add(p);
+        global.updateUI();
     }
 
     public void timer(){
@@ -125,15 +147,13 @@ public class Vue extends JFrame {
                 if(cpt[0] == 3){
                     model.setScoreTimer(model.getScoreTimer()-model.getNiveau());
                     prog.setValue(model.getScoreTimer());
-                    System.out.println("Timer");
-                    System.out.println("model.getScoreTimer() = " + model.getScoreTimer());
                     cpt[0]=0;
                 }
                 cpt[0]++;
                 if(model.testEnd()){
                     t.stop();
-                    msg("Game over");
-                    msg(model.end());
+                    msgWarn("Game over");
+                    msgWarn(model.end());
                     newGame();
                     refresh();
                 }
@@ -141,15 +161,33 @@ public class Vue extends JFrame {
         });
     }
 
+    public void pause(){
+        t.stop();
+        global.removeAll();
+        global.updateUI();
+    }
+
+    public void topScore(){
+        msgInfo(model.topScoreStr());
+    }
+
     public JButton[][] getTabBouton() {
         return tabBouton;
     }
 
     public JMenuItem getItemInterface1() { return itemInterface1; }
+    public JMenuItem getItemInterface2() { return itemInterface2; }
+    public JMenuItem getItemInterface3() { return itemInterface3; }
 
-    public void msg(String msgErreur){
+    public void msgWarn(String msgErreur){
         JOptionPane d = new JOptionPane();
         d.showMessageDialog(this, msgErreur, "Game over", JOptionPane.WARNING_MESSAGE);
+        JDialog fenErr = d.createDialog(this, "Fin");
+    }
+
+    public void msgInfo(String msgInfo){
+        JOptionPane d = new JOptionPane();
+        d.showMessageDialog(this, msgInfo, "Information", JOptionPane.INFORMATION_MESSAGE);
         JDialog fenErr = d.createDialog(this, "Fin");
     }
 }

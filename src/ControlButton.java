@@ -80,7 +80,7 @@ public class ControlButton implements ActionListener {
             }
             if (model.testEnd()){
                 vue.t.stop();
-                vue.msg(model.end());
+                vue.msgWarn(model.end());
                 vue.newGame();
             }
             vue.refresh();
